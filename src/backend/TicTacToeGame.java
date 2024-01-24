@@ -65,7 +65,7 @@ public class TicTacToeGame {
         observers.remove(observer);
     }
 
-    boolean getTurn(){
+    public boolean getTurn(){
         return this.turn;
     }
 
@@ -75,10 +75,6 @@ public class TicTacToeGame {
 
     void incrementMoves(){
         moveCount++;
-    }
-
-    void decrementMoves(){
-        moveCount--;
     }
 
 
@@ -134,8 +130,7 @@ public class TicTacToeGame {
     }
 
     private boolean checkConsecutive(Shape shape, Square s1, Square s2, Square s3){
-        return (s1.shape!=null && s2.shape!=null && s3.shape!=null &&
-                s1.shape.equals(shape) && s1.shape.equals(s2.shape) && s1.shape.equals(s3.shape));
+        return(s1.shape != null && s1.shape.equals(shape) && s1.shape.equals(s2.shape) && s1.shape.equals(s3.shape));
     }
 
     public boolean checkXWin(){
@@ -150,4 +145,7 @@ public class TicTacToeGame {
         return moveCount;
     }
 
+    public void decrementMoves() {
+        moveCount--;
+    }
 }
