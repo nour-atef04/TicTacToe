@@ -7,27 +7,38 @@ public class TicTacToeGame {
 
     private boolean turn;
     private boolean gameInPlay;
-    final Square[][] gameBoard;
+    public final Square[][] gameBoard = new Square[3][3];;
     private static volatile TicTacToeGame instance;
     private final List<Observer> observers = new ArrayList<>();
 
 
     private int moveCount = 0;
 
-    private Strategy strategy;
+    private Strategy strategy = new TwoPlayerStrategy();
 
-    private TicTacToeGame(Strategy strategy){
+    private TicTacToeGame(){
         instance = null;
         gameInPlay = true;
-        gameBoard = new Square[3][3];
+        initBoard();
+    }
+
+    private void initBoard(){
+        for(int i=0; i<3; i++){
+            for(int j=0; j<3; j++){
+                gameBoard[i][j] = new Square();
+            }
+        }
+    }
+
+    public void setStrategy(Strategy strategy){
         this.strategy = strategy;
     }
 
     // SINGLETON
-    public static TicTacToeGame getInstance(Strategy strategy) {
+    public static TicTacToeGame getInstance() {
         if (instance == null) {
             synchronized (TicTacToeGame.class){
-                if(instance == null) instance = new TicTacToeGame(strategy);
+                if(instance == null) instance = new TicTacToeGame();
             }
 
         }
@@ -119,14 +130,14 @@ public class TicTacToeGame {
     }
 
     private boolean checkConsecutive(Shape shape, Square s1, Square s2, Square s3){
-        return(s1.shape.equals(shape) && s1.shape.equals(s2.shape) && s1.shape.equals(s3.shape));
+        return(s1.shape != null && s1.shape.equals(shape) && s1.shape.equals(s2.shape) && s1.shape.equals(s3.shape));
     }
 
-    boolean checkXWin(){
+    public boolean checkXWin(){
         return(checkWinInRows(Shape.X) || checkWinInColumns(Shape.X) || checkWinInDiagonals(Shape.X));
     }
 
-    boolean checkOWin(){
+    public boolean checkOWin(){
         return(checkWinInRows(Shape.O) || checkWinInColumns(Shape.O) || checkWinInDiagonals(Shape.O));
     }
 

@@ -1,5 +1,7 @@
 package backend;
 
+import com.sun.source.tree.ReturnTree;
+
 public class Square {
 
     Shape shape;
@@ -10,12 +12,19 @@ public class Square {
         this.shape = shape;
     }
 
-    Shape getShape(){
+    public Shape getShape(){
         return this.shape;
     }
 
     boolean isEmpty(){
         return (this.shape == null);
+    }
+
+    //TODO: REMOVE THIS METHOD AFTER TESTING
+    public String printShape(){
+        if(this.shape == null) return " ";
+        if(this.shape.equals(Shape.X)) return "X";
+        else return "O";
     }
 
 }

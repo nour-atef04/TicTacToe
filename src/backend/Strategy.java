@@ -1,6 +1,6 @@
 package backend;
 
-interface Strategy {
+public interface Strategy {
 
     void makeMove(TicTacToeGame game, int row, int col);
 
