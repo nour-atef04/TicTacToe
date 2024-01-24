@@ -11,6 +11,7 @@ public class TicTacToeGame {
     private static volatile TicTacToeGame instance;
     private final List<Observer> observers = new ArrayList<>();
 
+
     private int moveCount = 0;
 
     private Strategy strategy;
