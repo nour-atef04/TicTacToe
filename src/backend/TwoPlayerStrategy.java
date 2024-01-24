@@ -11,6 +11,7 @@ public class TwoPlayerStrategy implements Strategy{
             game.gameBoard[row][col].addShape(Shape.O);
         }
         game.incrementMoves();
+        game.notifySquare(row,col);
         game.flipTurn();
     }
 }

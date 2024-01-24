@@ -19,10 +19,13 @@ public class View extends JFrame implements Observer {
     private TicTacToeGame game = TicTacToeGame.getInstance();
     boolean gameWon;
     boolean gameDraw;
+    Square[][] buttons = new Square[3][3];
+    JFrame parent;
 
     private final Stack<GameCommand> commandStack = new Stack<>();
 
-    public View(Strategy strategy) {
+    public View(Strategy strategy,JFrame mainGui) {
+        parent = mainGui;
         game.setStrategy(strategy);
         this.setTitle("Tic Tac Toe");
         this.setResizable(false);
@@ -35,12 +38,24 @@ public class View extends JFrame implements Observer {
         game.addObserver(this);
     }
 
+//    public static void main(String[] args) {
+//        View view = new View();
+//    }
+
     private void constructBoardGUI() {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                Square square = new Square(i, j);
-                square.addActionListener(square.buttonClickListener);
-                boardGUI.add(square);
+                buttons[i][j] = new Square(i, j);
+                buttons[i][j].addActionListener(buttons[i][j].buttonClickListener);
+                boardGUI.add(buttons[i][j]);
+            }
+        }
+    }
+    private void disableAllButtons() {
+        Component[] components = boardGUI.getComponents();
+        for (Component component : components) {
+            if (component instanceof Square) {
+                ((Square) component).setEnabled(false);
             }
         }
     }
@@ -49,25 +64,34 @@ public class View extends JFrame implements Observer {
     public void notifyWin(boolean X){
         gameWon = true;
 
-       /* if(X){
-
-            //JOptionPane.showMessageDialog(this, "Player X wins!", "Game Over", JOptionPane.INFORMATION_MESSAGE);
-
+       if(X){
+            JOptionPane.showMessageDialog(this, "Player X wins!", "Game Over", JOptionPane.INFORMATION_MESSAGE);
         }
         else{
             JOptionPane.showMessageDialog(this, "Player O wins!", "Game Over", JOptionPane.INFORMATION_MESSAGE);
-        }*/
+        }
+        disableAllButtons();
+        dispose();
+        parent.setVisible(true);
     }
 
 
     @Override
     public void notifyDraw() {
-        //JOptionPane.showMessageDialog(this, "DRAW!", "Game Over", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this, "DRAW!", "Game Over", JOptionPane.INFORMATION_MESSAGE);
         gameDraw = true;
+        disableAllButtons();
+        dispose();
+        parent.setVisible(true);
+    }
+
+    @Override
+    public void notifySquare(int row, int column) {
+        buttons[row][column].paintButton();
     }
 
 
-    private class Square extends JButton{
+    class Square extends JButton{
         private int row;
         private int column;
 
@@ -81,47 +105,34 @@ public class View extends JFrame implements Observer {
         ActionListener buttonClickListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
                     GameCommand command = new GameCommand(game, row, column);
                     command.makeMove();
-
-                if(command.validMove) {
-                    commandStack.push(command);
-
-
-                    if(gameWon){
-                        paintButtons();
-                        if(game.getTurn()){
-                            JOptionPane.showMessageDialog(null, "Player X wins!", "Game Over", JOptionPane.INFORMATION_MESSAGE);
-
-                        }
-                        else{
-                            JOptionPane.showMessageDialog(null, "Player O wins!", "Game Over", JOptionPane.INFORMATION_MESSAGE);
-                        }
-                        disableAllButtons();
+                    if(command.validMove) {
+                        commandStack.push(command);
                     }
-                    if(gameDraw){
-                        paintButtons();
-                        JOptionPane.showMessageDialog(null, "Draw!", "Game Over", JOptionPane.INFORMATION_MESSAGE);
-                        disableAllButtons();
-                    }
-                    paintButtons();
-
+//                    if(gameWon){
+//                        paintButton();
+//                        if(game.getTurn()){
+//                            JOptionPane.showMessageDialog(null, "Player X wins!", "Game Over", JOptionPane.INFORMATION_MESSAGE);
+//
+//                        }
+//                        else{
+//                            JOptionPane.showMessageDialog(null, "Player O wins!", "Game Over", JOptionPane.INFORMATION_MESSAGE);
+//                        }
+//                        disableAllButtons();
+//                    }
+//                    if(gameDraw){
+//                        paintButton();
+//                        JOptionPane.showMessageDialog(null, "Draw!", "Game Over", JOptionPane.INFORMATION_MESSAGE);
+//                        disableAllButtons();
+//                    }
+//                    paintButton();
                 }
-            }
         };
 
-        private void disableAllButtons() {
-            Component[] components = boardGUI.getComponents();
-            for (Component component : components) {
-                if (component instanceof Square) {
-                    ((Square) component).setEnabled(false);
-                }
-            }
-        }
 
-        private void paintButtons() {
-            if(game.getTurn()){
+        private void paintButton() {
+            if(game.getMoveCount() % 2 == 1){
                 setText("X");
                 setEnabled(false);
                 setForeground(Color.BLACK);
@@ -133,26 +144,6 @@ public class View extends JFrame implements Observer {
             }
             setFont(new Font("Arial", Font.PLAIN, 40));
             setFocusPainted(false);
-
-            /*for(int i=0; i<3; i++){
-                for(int j=0; j<3; j++){
-                    if(!game.gameBoard[i][j].isEmpty()){
-                        if(game.gameBoard[i][j].getShape().equals(Shape.X)){
-                            setText("X");
-                            setEnabled(false);
-                            setForeground(Color.BLACK);
-                        }
-                        else{
-                            setText("O");
-                            setEnabled(false);
-                            setForeground(Color.RED);
-                        }
-                        setFont(new Font("Arial", Font.PLAIN, 40));
-                        setFocusPainted(false);
-                    }
-                }
-            }*/
-
         }
 
         @Override

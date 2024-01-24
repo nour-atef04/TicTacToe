@@ -68,7 +68,7 @@ public class StartScreen {
                 startFrame.setVisible(false);
                 TicTacToeGame g = TicTacToeGame.getInstance();
                 g.restart();
-                View view = new View(new SinglePlayerStrategy());
+                View view = new View(new SinglePlayerStrategy(),startFrame);
             }
         });
 
@@ -89,7 +89,7 @@ public class StartScreen {
             startFrame.setVisible(false);
             TicTacToeGame g = TicTacToeGame.getInstance();
             g.restart();
-            View view = new View(new TwoPlayerStrategy());
+            View view = new View(new TwoPlayerStrategy(),startFrame);
         });
 
         button.setBackground(Color.WHITE);

@@ -26,6 +26,8 @@ public class TicTacToeGame {
         for(int i=0; i<3; i++){
             for(int j=0; j<3; j++){
                 gameBoard[i][j] = new Square();
+                gameBoard[i][j].row = i;
+                gameBoard[i][j].col = j;
             }
         }
     }
@@ -79,19 +81,18 @@ public class TicTacToeGame {
 
 
     private void checkGameStatus(){
-        //if draw
-        if(moveCount == 9){
-            notifyObserversDraw();
-            gameInPlay = false;
-        }
 
-        //else if X or O won
-        else{
+        //if X or O won
             //check which one won
             if(checkXWin() || checkOWin()){
                 notifyObserversWin();
                 gameInPlay = false;
+                return;
             }
+        //if draw
+        if(moveCount == 9){
+            notifyObserversDraw();
+            gameInPlay = false;
         }
     }
 
@@ -104,6 +105,11 @@ public class TicTacToeGame {
     void notifyObserversWin(){
         for (Observer observer : observers){
             observer.notifyWin(turn);
+        }
+    }
+    void notifySquare(int row, int column){
+        for (Observer observer : observers){
+            observer.notifySquare(row,column);
         }
     }
 

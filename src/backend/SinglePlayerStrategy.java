@@ -7,7 +7,7 @@ import java.util.List;
 public class SinglePlayerStrategy implements Strategy{
     private Shape player;
     private Shape opponent;
-    int minimaxTurnsTillEnd;
+  //  int minimaxTurnsTillEnd;
 
     @Override
     public void makeMove(TicTacToeGame game, int row, int col) {
@@ -21,14 +21,18 @@ public class SinglePlayerStrategy implements Strategy{
         }
         game.gameBoard[row][col].addShape(player);
         game.incrementMoves();
+        game.notifySquare(row,col);
         //game ended
         if (game.getMoveCount() == 9 || game.checkXWin() || game.checkOWin()){
             return;
         }
+        System.out.println(game.gameBoard[0][0].isEmpty());
         Square aiMove = getBestOpponentMove(game);
+        System.out.println("D" + aiMove.row + aiMove.col );
         //computer plays
         aiMove.addShape(opponent);
         game.incrementMoves();
+        game.notifySquare(aiMove.row , aiMove.col);
     }
 
     //here we are going to use the minimax algorithm, you can google it
@@ -42,7 +46,6 @@ public class SinglePlayerStrategy implements Strategy{
         //this is just a placeholder which forces us to take the first possible move, it means
        // X is maximizing score and O minimizing
         int bestScore = shape == Shape.X? Integer.MIN_VALUE : Integer.MAX_VALUE;
-        int turnstaken = 0;
         Square bestChoice = null;
         for (int i = 0 ; i < 3 ; i++){
             for (int j =0 ; j < 3 ; j++){
@@ -60,14 +63,7 @@ public class SinglePlayerStrategy implements Strategy{
                     || (shape == Shape.O && attemptedScore < bestScore)){
                         bestScore = attemptedScore;
                         bestChoice = game.gameBoard[i][j];
-                        turnstaken = minimaxTurnsTillEnd;
-                        minimaxTurnsTillEnd = 0;
-                    } else if ((shape == Shape.X && attemptedScore != 1
-                            ||shape == Shape.O && attemptedScore != -1) && attemptedScore == bestScore &&
-                    minimaxTurnsTillEnd > turnstaken) {
-                        bestChoice = game.gameBoard[i][j];
-                        turnstaken = minimaxTurnsTillEnd;
-                    }
+                     }
                     game.decrementMoves();
                     game.gameBoard[i][j].shape = null;
                 }
@@ -81,12 +77,8 @@ public class SinglePlayerStrategy implements Strategy{
     private int minimaxChecker(TicTacToeGame game, Shape shape){
         //we must compare with X and O for it to work
         if (game.checkXWin()){
-          //  System.out.println(1);
-            minimaxTurnsTillEnd = game.getMoveCount();
             return 1; //indicate X won
         } else if (game.checkOWin()) {
-         //   System.out.println(-1);
-            minimaxTurnsTillEnd = game.getMoveCount();
             return -1; //indicate O won
         } else if (game.getMoveCount() == 9) {
             return 0; //draw occurred
