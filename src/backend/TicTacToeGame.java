@@ -4,12 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TicTacToeGame {
-
     private boolean turn;
     private boolean gameInPlay;
-    private final Square[][] gameBoard;
+    final Square[][] gameBoard;
     private static volatile TicTacToeGame instance;
     private final List<Observer> observers = new ArrayList<>();
+
+    private int moves;
 
     private Strategy strategy;
 
@@ -35,6 +36,13 @@ public class TicTacToeGame {
         instance = null;
     }
 
+    public void validateMove(int row, int column) throws IllegalMoveException {
+        if(row<0 || row >2 || column < 0 || column >2 || !gameBoard[row][column].isEmpty()){
+            throw new IllegalMoveException();
+        }
+        strategy.makeMove(this,row,column);
+    }
+
     public void addObserver(Observer observer){
         observers.add(observer);
     }
@@ -42,5 +50,18 @@ public class TicTacToeGame {
     public void removeObserver(Observer observer){
         observers.remove(observer);
     }
+    public boolean isTurn() {
+        return turn;
+    }
+    public int getMoves() {
+        return moves;
+    }
 
+    public void incrementMoves(){
+        moves++;
+    }
+
+    public boolean checkerWinner(Shape shape) {
+        return true;
+    }
 }
