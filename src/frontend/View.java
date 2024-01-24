@@ -22,8 +22,8 @@ public class View extends JFrame implements Observer {
 
     private final Stack<GameCommand> commandStack = new Stack<>();
 
-    public View() {
-        game.setStrategy(new TwoPlayerStrategy());
+    public View(Strategy strategy) {
+        game.setStrategy(strategy);
         this.setTitle("Tic Tac Toe");
         this.setResizable(false);
         setSize(300, 300);
@@ -33,10 +33,6 @@ public class View extends JFrame implements Observer {
         this.add(boardGUI);
         this.setVisible(true);
         game.addObserver(this);
-    }
-
-    public static void main(String[] args) {
-        View view = new View();
     }
 
     private void constructBoardGUI() {
