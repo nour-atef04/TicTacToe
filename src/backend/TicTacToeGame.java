@@ -7,17 +7,20 @@ public class TicTacToeGame {
     private final Square[][] gameBoard;
     private static volatile TicTacToeGame instance;
 
-    private TicTacToeGame(){
+    private Strategy strategy;
+
+    private TicTacToeGame(Strategy strategy){
         instance = null;
         gameInPlay = true;
         gameBoard = new Square[3][3];
+        this.strategy = strategy;
     }
 
     // SINGLETON
-    public static TicTacToeGame getInstance() {
+    public static TicTacToeGame getInstance(Strategy strategy) {
         if (instance == null) {
             synchronized (TicTacToeGame.class){
-                if(instance == null) instance = new TicTacToeGame();
+                if(instance == null) instance = new TicTacToeGame(strategy);
             }
 
         }
