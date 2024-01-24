@@ -11,7 +11,7 @@ public class SinglePlayerStrategy implements Strategy{
 
     public SinglePlayerStrategy(TicTacToeGame game) {
         this.game = game;
-        if(!game.isTurn()){
+        if(!game.getTurn()){
             player = Shape.X;
             opponent = Shape.O;
         } else {
@@ -23,7 +23,7 @@ public class SinglePlayerStrategy implements Strategy{
     @Override
     public void makeMove(TicTacToeGame game, int row, int col) {
         //player plays first
-        if(!game.isTurn()){
+        if(!game.getTurn()){
             player = Shape.X;
             opponent = Shape.O;
         } else {
@@ -33,7 +33,7 @@ public class SinglePlayerStrategy implements Strategy{
         game.gameBoard[row][col].addShape(player);
         game.incrementMoves();
         //game ended
-        if (game.getMoves() == 9){
+        if (game.getMoveCount() == 9){
             return;
         }
         Square aiMove = getBestOpponentMove();
@@ -74,11 +74,11 @@ public class SinglePlayerStrategy implements Strategy{
     //this is to check all child node paths
     private int minimaxChecker(Shape shape){
         //we must compare with X and O for it to work
-        if (game.checkerWinner(Shape.X)){
+        if (game.checkXWin()){
             return 1; //indicate X won
-        } else if (game.checkerWinner(Shape.O)) {
+        } else if (game.checkOWin()) {
             return -1; //indicate O won
-        } else if (game.getMoves() == 9) {
+        } else if (game.getMoveCount() == 9) {
             return 0; //draw occurred
         }
         //if none of that happened we will try out all child moves, thus repeating minimax
