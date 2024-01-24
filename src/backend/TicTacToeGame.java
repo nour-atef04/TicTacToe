@@ -77,6 +77,10 @@ public class TicTacToeGame {
         moveCount++;
     }
 
+    void decrementMoves(){
+        moveCount--;
+    }
+
 
     private void checkGameStatus(){
         //if draw
@@ -130,7 +134,8 @@ public class TicTacToeGame {
     }
 
     private boolean checkConsecutive(Shape shape, Square s1, Square s2, Square s3){
-        return(s1.shape != null && s1.shape.equals(shape) && s1.shape.equals(s2.shape) && s1.shape.equals(s3.shape));
+        return (s1.shape!=null && s2.shape!=null && s3.shape!=null &&
+                s1.shape.equals(shape) && s1.shape.equals(s2.shape) && s1.shape.equals(s3.shape));
     }
 
     public boolean checkXWin(){

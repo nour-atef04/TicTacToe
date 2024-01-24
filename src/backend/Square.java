@@ -1,6 +1,5 @@
 package backend;
 
-import com.sun.source.tree.ReturnTree;
 
 public class Square {
 
