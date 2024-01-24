@@ -15,7 +15,7 @@ public class Square {
         return this.shape;
     }
 
-    boolean isEmpty(){
+    public boolean isEmpty(){
         return (this.shape == null);
     }
 

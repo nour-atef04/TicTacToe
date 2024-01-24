@@ -1,6 +1,7 @@
 package frontend;
 
 import backend.*;
+import backend.Shape;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,6 +10,8 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.font.GlyphMetrics;
+import java.util.Stack;
 
 public class View extends JFrame implements Observer {
 
@@ -16,6 +19,8 @@ public class View extends JFrame implements Observer {
     private TicTacToeGame game = TicTacToeGame.getInstance();
     boolean gameWon;
     boolean gameDraw;
+
+    private final Stack<GameCommand> commandStack = new Stack<>();
 
     public View() {
         game.setStrategy(new TwoPlayerStrategy());
@@ -80,10 +85,16 @@ public class View extends JFrame implements Observer {
         ActionListener buttonClickListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    game.validateMove(row,column);
+
+                    GameCommand command = new GameCommand(game, row, column);
+                    command.makeMove();
+
+                if(command.validMove) {
+                    commandStack.push(command);
+
+
                     if(gameWon){
-                        paintButton();
+                        paintButtons();
                         if(game.getTurn()){
                             JOptionPane.showMessageDialog(null, "Player X wins!", "Game Over", JOptionPane.INFORMATION_MESSAGE);
 
@@ -94,13 +105,12 @@ public class View extends JFrame implements Observer {
                         disableAllButtons();
                     }
                     if(gameDraw){
-                        paintButton();
+                        paintButtons();
                         JOptionPane.showMessageDialog(null, "Draw!", "Game Over", JOptionPane.INFORMATION_MESSAGE);
                         disableAllButtons();
                     }
-                    paintButton();
-                } catch (IllegalMoveException ex) {
-                    System.out.println("Illegal move");
+                    paintButtons();
+
                 }
             }
         };
@@ -114,7 +124,7 @@ public class View extends JFrame implements Observer {
             }
         }
 
-        private void paintButton() {
+        private void paintButtons() {
             if(game.getTurn()){
                 setText("X");
                 setEnabled(false);
@@ -127,6 +137,26 @@ public class View extends JFrame implements Observer {
             }
             setFont(new Font("Arial", Font.PLAIN, 40));
             setFocusPainted(false);
+
+            /*for(int i=0; i<3; i++){
+                for(int j=0; j<3; j++){
+                    if(!game.gameBoard[i][j].isEmpty()){
+                        if(game.gameBoard[i][j].getShape().equals(Shape.X)){
+                            setText("X");
+                            setEnabled(false);
+                            setForeground(Color.BLACK);
+                        }
+                        else{
+                            setText("O");
+                            setEnabled(false);
+                            setForeground(Color.RED);
+                        }
+                        setFont(new Font("Arial", Font.PLAIN, 40));
+                        setFocusPainted(false);
+                    }
+                }
+            }*/
+
         }
 
         @Override
