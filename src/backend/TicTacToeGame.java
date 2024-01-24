@@ -37,6 +37,14 @@ public class TicTacToeGame {
         instance = null;
     }
 
+    public void validateMove(int row, int column) throws IllegalMoveException {
+        if(row<0 || row >2 || column < 0 || column >2 || !gameBoard[row][column].isEmpty()){
+            throw new IllegalMoveException();
+        }
+        strategy.makeMove(this,row,column);
+        checkGameStatus();
+    }
+
     public void addObserver(Observer observer){
         observers.add(observer);
     }
@@ -57,30 +65,33 @@ public class TicTacToeGame {
         moveCount++;
     }
 
-    private void makeMove(int row, int col){
-        checkGameStatus();
-        //TODO: CHECK IF VALID MOVE & CHECK IF GAME IS IN PLAY
-        strategy.makeMove(this, row, col);
-    }
 
     private void checkGameStatus(){
         //if draw
         if(moveCount == 9){
-            //notify draw
+            notifyObserversDraw();
             gameInPlay = false;
         }
 
         //else if X or O won
         else{
             //check which one won
-            if(checkXWin()){
-                //notify X won
+            if(checkXWin() || checkOWin()){
+                notifyObserversWin();
                 gameInPlay = false;
             }
-            else if(checkOWin()){
-                //notify O won
-                gameInPlay = false;
-            }
+        }
+    }
+
+    void notifyObserversDraw(){
+        for (Observer observer : observers){
+            observer.notifyDraw();
+        }
+    }
+
+    void notifyObserversWin(){
+        for (Observer observer : observers){
+            observer.notifyWin(turn);
         }
     }
 
@@ -110,12 +121,16 @@ public class TicTacToeGame {
         return(s1.shape.equals(shape) && s1.shape.equals(s2.shape) && s1.shape.equals(s3.shape));
     }
 
-    private boolean checkXWin(){
+    boolean checkXWin(){
         return(checkWinInRows(Shape.X) || checkWinInColumns(Shape.X) || checkWinInDiagonals(Shape.X));
     }
 
-    private boolean checkOWin(){
+    boolean checkOWin(){
         return(checkWinInRows(Shape.O) || checkWinInColumns(Shape.O) || checkWinInDiagonals(Shape.O));
+    }
+
+    public int getMoveCount() {
+        return moveCount;
     }
 
 }
