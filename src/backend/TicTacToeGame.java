@@ -1,11 +1,15 @@
 package backend;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TicTacToeGame {
 
     private boolean turn;
     private boolean gameInPlay;
     private final Square[][] gameBoard;
     private static volatile TicTacToeGame instance;
+    private final List<Observer> observers = new ArrayList<>();
 
     private Strategy strategy;
 
@@ -29,6 +33,14 @@ public class TicTacToeGame {
 
     public static void restart(){
         instance = null;
+    }
+
+    public void addObserver(Observer observer){
+        observers.add(observer);
+    }
+
+    public void removeObserver(Observer observer){
+        observers.remove(observer);
     }
 
 }
