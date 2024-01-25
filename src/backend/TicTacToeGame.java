@@ -7,7 +7,7 @@ public class TicTacToeGame {
 
     private boolean turn;
     private boolean gameInPlay;
-    public final Square[][] gameBoard = new Square[3][3];;
+    final Square[][] gameBoard = new Square[3][3];;
     private static volatile TicTacToeGame instance;
     private final List<Observer> observers = new ArrayList<>();
 
@@ -51,7 +51,7 @@ public class TicTacToeGame {
         instance = null;
     }
 
-    public void validateMove(int row, int column) throws IllegalMoveException {
+    void validateMove(int row, int column) throws IllegalMoveException {
         if(row<0 || row >2 || column < 0 || column >2 || !gameBoard[row][column].isEmpty()){
             throw new IllegalMoveException();
         }
@@ -63,11 +63,11 @@ public class TicTacToeGame {
         observers.add(observer);
     }
 
-    public void removeObserver(Observer observer){
+    void removeObserver(Observer observer){
         observers.remove(observer);
     }
 
-    public boolean getTurn(){
+    boolean getTurn(){
         return this.turn;
     }
 
@@ -139,11 +139,11 @@ public class TicTacToeGame {
         return(s1.shape != null && s1.shape.equals(shape) && s1.shape.equals(s2.shape) && s1.shape.equals(s3.shape));
     }
 
-    public boolean checkXWin(){
+    boolean checkXWin(){
         return(checkWinInRows(Shape.X) || checkWinInColumns(Shape.X) || checkWinInDiagonals(Shape.X));
     }
 
-    public boolean checkOWin(){
+    boolean checkOWin(){
         return(checkWinInRows(Shape.O) || checkWinInColumns(Shape.O) || checkWinInDiagonals(Shape.O));
     }
 
@@ -151,7 +151,7 @@ public class TicTacToeGame {
         return moveCount;
     }
 
-    public void decrementMoves() {
+    void decrementMoves() {
         moveCount--;
     }
 }

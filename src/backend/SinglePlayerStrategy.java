@@ -7,7 +7,6 @@ import java.util.List;
 public class SinglePlayerStrategy implements Strategy{
     private Shape player;
     private Shape opponent;
-  //  int minimaxTurnsTillEnd;
 
     @Override
     public void makeMove(TicTacToeGame game, int row, int col) {
@@ -26,9 +25,8 @@ public class SinglePlayerStrategy implements Strategy{
         if (game.getMoveCount() == 9 || game.checkXWin() || game.checkOWin()){
             return;
         }
-        System.out.println(game.gameBoard[0][0].isEmpty());
+
         Square aiMove = getBestOpponentMove(game);
-        System.out.println("D" + aiMove.row + aiMove.col );
         //computer plays
         aiMove.addShape(opponent);
         game.incrementMoves();
@@ -69,7 +67,6 @@ public class SinglePlayerStrategy implements Strategy{
                 }
             }
         }
-        System.out.println(bestScore);
         return bestChoice;
     }
 

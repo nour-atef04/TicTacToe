@@ -38,10 +38,6 @@ public class View extends JFrame implements Observer {
         game.addObserver(this);
     }
 
-//    public static void main(String[] args) {
-//        View view = new View();
-//    }
-
     private void constructBoardGUI() {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
@@ -110,23 +106,6 @@ public class View extends JFrame implements Observer {
                     if(command.validMove) {
                         commandStack.push(command);
                     }
-//                    if(gameWon){
-//                        paintButton();
-//                        if(game.getTurn()){
-//                            JOptionPane.showMessageDialog(null, "Player X wins!", "Game Over", JOptionPane.INFORMATION_MESSAGE);
-//
-//                        }
-//                        else{
-//                            JOptionPane.showMessageDialog(null, "Player O wins!", "Game Over", JOptionPane.INFORMATION_MESSAGE);
-//                        }
-//                        disableAllButtons();
-//                    }
-//                    if(gameDraw){
-//                        paintButton();
-//                        JOptionPane.showMessageDialog(null, "Draw!", "Game Over", JOptionPane.INFORMATION_MESSAGE);
-//                        disableAllButtons();
-//                    }
-//                    paintButton();
                 }
         };
 
